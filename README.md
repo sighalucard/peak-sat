@@ -7,7 +7,7 @@ Digital SAT prep with adaptive practice, a context-aware AI tutor, spaced review
 ```bash
 npm install                 # also runs prisma generate
 cp .env.example .env        # then set AUTH_SECRET (and ANTHROPIC_API_KEY for the tutor)
-npm run db:migrate          # creates the SQLite dev database
+npm run db:migrate          # creates the tables in your Postgres database
 npm run dev                 # http://localhost:3000
 ```
 
@@ -15,10 +15,14 @@ Environment variables (server-side only; nothing secret is sent to the browser):
 
 | Variable | Required | Purpose |
 |---|---|---|
-| `DATABASE_URL` | yes | `file:./dev.db` locally. Use Postgres in production (change `provider` in `prisma/schema.prisma`). |
+| `DATABASE_URL` | yes | A Postgres connection string. Locally, e.g. `postgresql://user:pass@localhost:5432/peak`; in production, a free Neon database works. |
 | `AUTH_SECRET` | yes | 32+ random characters, used to sign session cookies. `openssl rand -base64 32` |
 | `ANTHROPIC_API_KEY` | for the tutor | Without it the tutor shows an "unavailable" message and everything else works. |
 | `NEXT_PUBLIC_DESMOS_API_KEY` | for production | Desmos's demo key is used if unset. It's fine for development only; get a production key from Desmos. |
+
+## Deploy on Vercel
+
+Import the repo in Vercel and set `DATABASE_URL` and `AUTH_SECRET` (plus `ANTHROPIC_API_KEY` if you want the tutor). The `vercel-build` script runs database migrations before building.
 
 ## Checks
 
@@ -41,7 +45,7 @@ npm run eval:tutor -- --yes   # real API calls: tutor accuracy, pushback, and hi
 
 - Score estimates and practice-test scores are unofficial. Adaptive routing follows the published two-stage design, but the threshold and scaling are approximations, not College Board's.
 - The bank holds 303 questions (93 Reading and Writing, 210 Math). Full tests draw from the same pool as practice, so heavy users will see repeats.
-- The tutor's behavior has only been tested without an API key. Run `npm run eval:tutor` once a key is set.
+- The tutor uses Claude Haiku 5.5, the lowest-cost model. Its behavior has only been tested without an API key. Run `npm run eval:tutor` once a key is set.
 - The rate limiter is in-memory, so with several server instances, use a shared store such as Redis.
 
 SAT® is a trademark registered by the College Board, which is not affiliated with, and does not endorse, this product.
