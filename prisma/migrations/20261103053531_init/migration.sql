@@ -1,33 +1,36 @@
 -- CreateTable
 CREATE TABLE "User" (
-    "id" TEXT NOT NULL PRIMARY KEY,
+    "id" TEXT NOT NULL,
     "email" TEXT NOT NULL,
     "name" TEXT,
     "passwordHash" TEXT NOT NULL,
-    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "User_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
 CREATE TABLE "Profile" (
-    "userId" TEXT NOT NULL PRIMARY KEY,
+    "userId" TEXT NOT NULL,
     "onboarded" BOOLEAN NOT NULL DEFAULT false,
     "currentScore" INTEGER,
     "targetScore" INTEGER,
-    "testDate" DATETIME,
+    "testDate" TIMESTAMP(3),
     "dailyMinutes" INTEGER,
     "strongest" TEXT,
     "weakest" TEXT,
     "takenBefore" BOOLEAN,
-    "hintDelayFactor" REAL NOT NULL DEFAULT 1.0,
+    "hintDelayFactor" DOUBLE PRECISION NOT NULL DEFAULT 1.0,
     "autoHintNudges" BOOLEAN NOT NULL DEFAULT true,
     "weeklyGoalMin" INTEGER,
-    "updatedAt" DATETIME NOT NULL,
-    CONSTRAINT "Profile_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User" ("id") ON DELETE CASCADE ON UPDATE CASCADE
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "Profile_pkey" PRIMARY KEY ("userId")
 );
 
 -- CreateTable
 CREATE TABLE "Attempt" (
-    "id" TEXT NOT NULL PRIMARY KEY,
+    "id" TEXT NOT NULL,
     "userId" TEXT NOT NULL,
     "questionId" TEXT NOT NULL,
     "skill" TEXT NOT NULL,
@@ -44,13 +47,14 @@ CREATE TABLE "Attempt" (
     "mistakeCategory" TEXT,
     "mistakeConfirmed" BOOLEAN NOT NULL DEFAULT false,
     "overTime" BOOLEAN NOT NULL DEFAULT false,
-    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    CONSTRAINT "Attempt_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User" ("id") ON DELETE CASCADE ON UPDATE CASCADE
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "Attempt_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
 CREATE TABLE "PracticeSession" (
-    "id" TEXT NOT NULL PRIMARY KEY,
+    "id" TEXT NOT NULL,
     "userId" TEXT NOT NULL,
     "kind" TEXT NOT NULL,
     "title" TEXT NOT NULL,
@@ -58,57 +62,58 @@ CREATE TABLE "PracticeSession" (
     "state" TEXT NOT NULL,
     "status" TEXT NOT NULL DEFAULT 'active',
     "result" TEXT,
-    "startedAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" DATETIME NOT NULL,
-    "completedAt" DATETIME,
-    CONSTRAINT "PracticeSession_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User" ("id") ON DELETE CASCADE ON UPDATE CASCADE
+    "startedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+    "completedAt" TIMESTAMP(3),
+
+    CONSTRAINT "PracticeSession_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
 CREATE TABLE "ReviewItem" (
-    "id" TEXT NOT NULL PRIMARY KEY,
+    "id" TEXT NOT NULL,
     "userId" TEXT NOT NULL,
     "questionId" TEXT NOT NULL,
     "skill" TEXT NOT NULL,
-    "ease" REAL NOT NULL DEFAULT 2.3,
-    "intervalDays" REAL NOT NULL DEFAULT 0,
+    "ease" DOUBLE PRECISION NOT NULL DEFAULT 2.3,
+    "intervalDays" DOUBLE PRECISION NOT NULL DEFAULT 0,
     "reps" INTEGER NOT NULL DEFAULT 0,
     "lapses" INTEGER NOT NULL DEFAULT 0,
-    "dueAt" DATETIME NOT NULL,
-    "lastSeenAt" DATETIME NOT NULL,
+    "dueAt" TIMESTAMP(3) NOT NULL,
+    "lastSeenAt" TIMESTAMP(3) NOT NULL,
     "retired" BOOLEAN NOT NULL DEFAULT false,
-    CONSTRAINT "ReviewItem_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User" ("id") ON DELETE CASCADE ON UPDATE CASCADE
+
+    CONSTRAINT "ReviewItem_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
 CREATE TABLE "SavedQuestion" (
     "userId" TEXT NOT NULL,
     "questionId" TEXT NOT NULL,
-    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
-    PRIMARY KEY ("userId", "questionId"),
-    CONSTRAINT "SavedQuestion_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User" ("id") ON DELETE CASCADE ON UPDATE CASCADE
+    CONSTRAINT "SavedQuestion_pkey" PRIMARY KEY ("userId","questionId")
 );
 
 -- CreateTable
 CREATE TABLE "ChatMessage" (
-    "id" TEXT NOT NULL PRIMARY KEY,
+    "id" TEXT NOT NULL,
     "userId" TEXT NOT NULL,
     "threadKey" TEXT NOT NULL,
     "role" TEXT NOT NULL,
     "content" TEXT NOT NULL,
-    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    CONSTRAINT "ChatMessage_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User" ("id") ON DELETE CASCADE ON UPDATE CASCADE
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "ChatMessage_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
 CREATE TABLE "LessonView" (
     "userId" TEXT NOT NULL,
     "lessonId" TEXT NOT NULL,
-    "completedAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "completedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
-    PRIMARY KEY ("userId", "lessonId"),
-    CONSTRAINT "LessonView_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User" ("id") ON DELETE CASCADE ON UPDATE CASCADE
+    CONSTRAINT "LessonView_pkey" PRIMARY KEY ("userId","lessonId")
 );
 
 -- CreateIndex
@@ -134,3 +139,24 @@ CREATE UNIQUE INDEX "ReviewItem_userId_questionId_key" ON "ReviewItem"("userId",
 
 -- CreateIndex
 CREATE INDEX "ChatMessage_userId_threadKey_createdAt_idx" ON "ChatMessage"("userId", "threadKey", "createdAt");
+
+-- AddForeignKey
+ALTER TABLE "Profile" ADD CONSTRAINT "Profile_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Attempt" ADD CONSTRAINT "Attempt_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "PracticeSession" ADD CONSTRAINT "PracticeSession_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "ReviewItem" ADD CONSTRAINT "ReviewItem_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "SavedQuestion" ADD CONSTRAINT "SavedQuestion_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "ChatMessage" ADD CONSTRAINT "ChatMessage_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "LessonView" ADD CONSTRAINT "LessonView_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
