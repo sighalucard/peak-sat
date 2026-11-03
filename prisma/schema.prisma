@@ -1,0 +1,132 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  name         String?
+  passwordHash String
+  createdAt    DateTime @default(now())
+
+  profile      Profile?
+  attempts     Attempt[]
+  sessions     PracticeSession[]
+  reviewItems  ReviewItem[]
+  saved        SavedQuestion[]
+  chats        ChatMessage[]
+  lessonViews  LessonView[]
+}
+
+model Profile {
+  userId          String    @id
+  user            User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  onboarded       Boolean   @default(false)
+  currentScore    Int?
+  targetScore     Int?
+  testDate        DateTime?
+  dailyMinutes    Int?
+  strongest       String?
+  weakest         String?
+  takenBefore     Boolean?
+  hintDelayFactor Float     @default(1.0)
+  autoHintNudges  Boolean   @default(true)
+  weeklyGoalMin   Int?
+  updatedAt       DateTime  @updatedAt
+}
+
+model Attempt {
+  id              String   @id @default(cuid())
+  userId          String
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  questionId      String
+  skill           String
+  domain          String
+  section         String
+  difficulty      Int
+  selected        String?
+  correct         Boolean
+  timeMs          Int
+  hintsUsed       Int      @default(0)
+  guessed         Boolean  @default(false)
+  mode            String
+  sessionId       String?
+  mistakeCategory String?
+  mistakeConfirmed Boolean @default(false)
+  overTime        Boolean  @default(false)
+  createdAt       DateTime @default(now())
+
+  @@index([userId, createdAt])
+  @@index([userId, skill])
+  @@index([userId, questionId])
+}
+
+model PracticeSession {
+  id          String    @id @default(cuid())
+  userId      String
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  kind        String
+  title       String
+  config      String
+  state       String
+  status      String    @default("active")
+  result      String?
+  startedAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  completedAt DateTime?
+
+  @@index([userId, status])
+}
+
+model ReviewItem {
+  id          String   @id @default(cuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  questionId  String
+  skill       String
+  ease        Float    @default(2.3)
+  intervalDays Float   @default(0)
+  reps        Int      @default(0)
+  lapses      Int      @default(0)
+  dueAt       DateTime
+  lastSeenAt  DateTime
+  retired     Boolean  @default(false)
+
+  @@unique([userId, questionId])
+  @@index([userId, dueAt])
+}
+
+model SavedQuestion {
+  userId     String
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  questionId String
+  createdAt  DateTime @default(now())
+
+  @@id([userId, questionId])
+}
+
+model ChatMessage {
+  id         String   @id @default(cuid())
+  userId     String
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  threadKey  String
+  role       String
+  content    String
+  createdAt  DateTime @default(now())
+
+  @@index([userId, threadKey, createdAt])
+}
+
+model LessonView {
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  lessonId  String
+  completedAt DateTime @default(now())
+
+  @@id([userId, lessonId])
+}

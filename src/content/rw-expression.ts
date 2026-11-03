@@ -1,0 +1,198 @@
+import { rw } from "./rw-helpers";
+
+// Expression of Ideas: rhetorical synthesis (notes questions) and transitions.
+
+export const RW_EXPRESSION = [
+  rw({
+    id: "rw-rs-1", skill: "rhetorical-synthesis", difficulty: 2,
+    passage: "While researching a topic, a student has taken the following notes:\n• The Atacama Desert in Chile is one of the driest places on Earth.\n• Some weather stations there have recorded almost no rain for decades.\n• Its dry, high-altitude air makes it an excellent location for astronomy.\n• Several major telescopes have been built there.",
+    stem: "The student wants to explain why the Atacama Desert is used for astronomy. Which choice most effectively uses relevant information from the notes to accomplish this goal?",
+    choices: [
+      ["Because of its dry, high-altitude air, Chile's Atacama Desert is an excellent location for astronomy, and several major telescopes have been built there.", "Correct. It gives the reason (dry, high-altitude air) and connects it to astronomy and the telescopes."],
+      ["The Atacama Desert in Chile is one of the driest places on Earth.", "This is a fact about the desert but doesn't mention astronomy.", "misread"],
+      ["Some weather stations in the Atacama Desert have recorded almost no rain for decades.", "This describes dryness but never connects it to astronomy.", "misread"],
+      ["Several major telescopes exist, and some are in Chile.", "This mentions telescopes but doesn't explain why the Atacama was chosen.", "evidence"],
+    ],
+    answer: "A",
+    hints: [
+      "Read the goal carefully. It asks you to explain WHY.",
+      "The right answer must mention astronomy and give a reason.",
+      "Which note gives the reason the desert suits astronomy?",
+    ],
+    explanation: "The goal is to explain why the Atacama is used for astronomy. Only A gives the reason (dry, high-altitude air) and links it to astronomy. B and C describe dryness without the astronomy connection, and D doesn't give a reason.",
+    takeaway: "Rhetorical synthesis: ignore the notes at first and read the goal. Then pick the choice that does exactly that goal, even if other choices are accurate.",
+  }),
+  rw({
+    id: "rw-rs-2", skill: "rhetorical-synthesis", difficulty: 2,
+    passage: "While researching a topic, a student has taken the following notes:\n• Glass frogs are found in Central and South American rainforests.\n• Their skin is translucent, so their internal organs are visible from below.\n• When sleeping, they pull most of their red blood cells into their liver.\n• This makes their bodies even more transparent and harder for predators to spot.",
+    stem: "The student wants to emphasize how glass frogs avoid predators. Which choice most effectively uses relevant information from the notes to accomplish this goal?",
+    choices: [
+      ["Glass frogs live in Central and South American rainforests.", "This gives location only and says nothing about avoiding predators.", "misread"],
+      ["Glass frogs have translucent skin through which their internal organs are visible.", "This describes their appearance but doesn't connect it to predators.", "misread"],
+      ["By pulling most of their red blood cells into their liver while they sleep, glass frogs become even more transparent and harder for predators to spot.", "Correct. It describes the behavior and explicitly connects it to avoiding predators."],
+      ["Glass frogs, found in rainforests, have skin that is translucent.", "This combines two facts but leaves out predators entirely.", "misread"],
+    ],
+    answer: "C",
+    hints: [
+      "The goal is about avoiding predators.",
+      "Which note mentions predators?",
+      "Choose the option that includes that note's information.",
+    ],
+    explanation: "Only the last note connects to predators, and only choice C uses it, explaining how moving red blood cells to the liver makes the frogs more transparent and harder to spot.",
+    takeaway: "Find the key word in the goal ('predators') and eliminate every choice that doesn't address it.",
+  }),
+  rw({
+    id: "rw-rs-3", skill: "rhetorical-synthesis", difficulty: 3,
+    passage: "While researching a topic, a student has taken the following notes:\n• Bamboo and oak are both used to make flooring.\n• Bamboo can be harvested every 3–5 years.\n• Oak trees take 40–60 years to reach harvestable size.\n• Both materials can produce durable floors when properly processed.",
+    stem: "The student wants to contrast how quickly the two materials can be replenished. Which choice most effectively uses relevant information from the notes to accomplish this goal?",
+    choices: [
+      ["Both bamboo and oak can produce durable floors when properly processed.", "This shows a similarity, not a contrast, and doesn't address replenishment.", "misread"],
+      ["Bamboo can be harvested every 3–5 years.", "This gives only one side of the contrast.", "elimination"],
+      ["Bamboo and oak are both used to make flooring, and both are durable.", "This is a similarity, not a contrast.", "misread"],
+      ["Whereas bamboo can be harvested every 3–5 years, oak trees take 40–60 years to reach harvestable size.", "Correct. 'Whereas' marks a contrast, and both replenishment times are included."],
+    ],
+    answer: "D",
+    hints: [
+      "Two key words in the goal: 'contrast' and 'replenished.'",
+      "A contrast needs information about BOTH materials.",
+      "Which choice includes both harvesting times and signals a difference?",
+    ],
+    explanation: "The goal requires a contrast of replenishment speed. D includes both time frames and uses 'whereas' to mark the contrast. B has only one material, and A and C show similarities.",
+    takeaway: "If the goal says 'contrast' or 'compare,' the answer must mention both things being compared.",
+  }),
+  rw({
+    id: "rw-rs-4", skill: "rhetorical-synthesis", difficulty: 1,
+    passage: "While researching a topic, a student has taken the following notes:\n• The Golden Gate Bridge opened in 1937.\n• It connects San Francisco to Marin County.\n• Its distinctive color is called \"International Orange.\"\n• The color was chosen partly to make the bridge visible in fog.",
+    stem: "The student wants to explain the reason for the bridge's color. Which choice most effectively uses relevant information from the notes to accomplish this goal?",
+    choices: [
+      ["The Golden Gate Bridge opened in 1937.", "This gives a date, not a reason for the color.", "misread"],
+      ["The Golden Gate Bridge's \"International Orange\" color was chosen partly to make the bridge visible in fog.", "Correct. It names the color and gives the reason it was chosen."],
+      ["The Golden Gate Bridge connects San Francisco to Marin County.", "This gives location, not a reason for the color.", "misread"],
+      ["The Golden Gate Bridge is a famous bridge with a distinctive color.", "It mentions color but gives no reason.", "elimination"],
+    ],
+    answer: "B",
+    hints: [
+      "The goal asks for a reason.",
+      "Which note explains why something was chosen?",
+      "Pick the choice that includes that reason.",
+    ],
+    explanation: "Only B states the reason for the color: visibility in fog.",
+    takeaway: "Rhetorical synthesis questions are about the goal, not about including as many facts as possible.",
+  }),
+
+  // Transitions
+  rw({
+    id: "rw-tr-1", skill: "transitions", difficulty: 1,
+    passage: "Many plants rely on bees for pollination. ______ some plants are pollinated mainly by the wind, which carries pollen from one flower to another.",
+    stem: "Which choice completes the text with the most logical transition?",
+    choices: [
+      ["However,", "Correct. The second sentence contrasts with the first: wind pollination versus bee pollination."],
+      ["For example,", "Wind pollination is not an example of bee pollination.", "concept"],
+      ["As a result,", "Wind pollination isn't caused by plants relying on bees.", "concept"],
+      ["Similarly,", "Wind pollination is different from bee pollination, not similar.", "concept"],
+    ],
+    answer: "A",
+    hints: [
+      "Determine the relationship between the two sentences.",
+      "Are they saying similar things, or different things?",
+      "Choose the transition that signals contrast.",
+    ],
+    explanation: "Sentence 1: plants use bees. Sentence 2: some plants use wind instead. That's a contrast, so 'However' fits.",
+    takeaway: "Transitions: name the relationship first (contrast, example, cause-effect, addition, sequence), then pick the word.",
+  }),
+  rw({
+    id: "rw-tr-2", skill: "transitions", difficulty: 2,
+    passage: "The town's only bridge was closed for repairs for six months. ______ residents had to drive an extra twenty miles to reach the hospital in the neighboring city.",
+    stem: "Which choice completes the text with the most logical transition?",
+    choices: [
+      ["Nevertheless,", "'Nevertheless' signals a contrast, but the longer drive is a consequence of the closure.", "concept"],
+      ["Consequently,", "Correct. The extra drive results from the bridge closure."],
+      ["In other words,", "The second sentence doesn't restate the first. It describes an effect.", "concept"],
+      ["Likewise,", "'Likewise' signals similarity, not consequence.", "concept"],
+    ],
+    answer: "B",
+    hints: [
+      "Did the second event happen because of the first?",
+      "A bridge closure leads to a longer drive. What kind of relationship is that?",
+      "Choose a cause-and-effect transition.",
+    ],
+    explanation: "The bridge closed (cause), so residents had to drive farther (effect). 'Consequently' signals cause and effect.",
+    takeaway: "Cause → effect transitions: therefore, consequently, as a result, thus.",
+  }),
+  rw({
+    id: "rw-tr-3", skill: "transitions", difficulty: 2,
+    passage: "Early bicycles were difficult and even dangerous to ride. The \"penny-farthing,\" ______ had a huge front wheel that placed riders high above the ground, making falls common and serious.",
+    stem: "Which choice completes the text with the most logical transition?",
+    choices: [
+      ["for instance,", "Correct. The penny-farthing is a specific example of an early bicycle that was difficult and dangerous."],
+      ["in contrast,", "The penny-farthing supports the first sentence. It doesn't contrast with it.", "concept"],
+      ["meanwhile,", "'Meanwhile' signals simultaneous events, not an example.", "concept"],
+      ["in conclusion,", "This is not a summary. It introduces a specific case.", "concept"],
+    ],
+    answer: "A",
+    hints: [
+      "The first sentence makes a general claim.",
+      "Is the second sentence a specific case of that claim?",
+      "Choose a transition that introduces an example.",
+    ],
+    explanation: "General claim: early bicycles were dangerous. Specific case: the penny-farthing. 'For instance' introduces an example.",
+    takeaway: "General statement → specific case = 'for example' or 'for instance.'",
+  }),
+  rw({
+    id: "rw-tr-4", skill: "transitions", difficulty: 3,
+    passage: "Critics initially dismissed the painter's work as crude and unfinished. Within a decade, ______ the same loose brushwork they had mocked was being praised as bold and expressive, and younger artists were imitating it.",
+    stem: "Which choice completes the text with the most logical transition?",
+    choices: [
+      ["similarly,", "The later praise is a reversal of the dismissal, not a similar reaction.", "concept"],
+      ["for example,", "The praise isn't an example of the dismissal.", "concept"],
+      ["however,", "Correct. The critical opinion reversed, from dismissal to praise, so a contrast transition is needed."],
+      ["therefore,", "The dismissal didn't cause the praise. 'Therefore' suggests cause and effect.", "concept"],
+    ],
+    answer: "C",
+    hints: [
+      "Compare the critics' early reaction with the later reaction.",
+      "Did opinions stay the same, or reverse?",
+      "Which transition signals a reversal or contrast?",
+    ],
+    explanation: "Initially dismissed → later praised and imitated. That's a contrast, so 'however' is correct. 'Therefore' wrongly implies the dismissal caused the praise.",
+    takeaway: "Watch for 'therefore' traps: two events in sequence aren't necessarily cause and effect.",
+  }),
+  rw({
+    id: "rw-tr-5", skill: "transitions", difficulty: 2,
+    passage: "Solar panels generate electricity without producing greenhouse gas emissions during operation. ______ their costs have fallen dramatically over the past decade, making them affordable for many homeowners.",
+    stem: "Which choice completes the text with the most logical transition?",
+    choices: [
+      ["Moreover,", "Correct. Falling costs are an additional advantage of solar panels, adding to the first benefit."],
+      ["Instead,", "'Instead' suggests replacement, but falling costs don't replace the emissions benefit.", "concept"],
+      ["Even so,", "'Even so' suggests a contrast, but both sentences describe advantages.", "concept"],
+      ["Specifically,", "Falling costs aren't a more specific version of the emissions benefit.", "concept"],
+    ],
+    answer: "A",
+    hints: [
+      "Is the second sentence positive or negative about solar panels?",
+      "Both sentences describe benefits. What relationship is that?",
+      "Choose a transition that adds a point.",
+    ],
+    explanation: "Both sentences present advantages of solar panels, so the second adds to the first. 'Moreover' is an addition transition.",
+    takeaway: "Addition: moreover, furthermore, additionally, in addition.",
+  }),
+  rw({
+    id: "rw-tr-6", skill: "transitions", difficulty: 3,
+    passage: "The experiment's results appeared to confirm the team's hypothesis. ______ when other laboratories attempted to reproduce the experiment, none obtained similar results, raising doubts about the original findings.",
+    stem: "Which choice completes the text with the most logical transition?",
+    choices: [
+      ["Subsequently,", "'Subsequently' only shows time order and misses the contrast between confirmation and doubt.", "elimination"],
+      ["Indeed,", "'Indeed' reinforces the previous point, but the second sentence undermines it.", "concept"],
+      ["Yet", "Correct. 'Yet' signals that the failed replications contrast with the apparent confirmation."],
+      ["Accordingly,", "'Accordingly' signals a consequence, but failed replications don't follow from confirmation.", "concept"],
+    ],
+    answer: "C",
+    hints: [
+      "Does the second sentence support or undermine the first?",
+      "'Raising doubts' tells you there is tension between the sentences.",
+      "Pick the transition that best captures a contrast. Be careful with a choice that is only about time order.",
+    ],
+    explanation: "The results 'appeared to confirm' the hypothesis, but replications failed and raised doubts, a clear contrast. 'Yet' expresses it. 'Subsequently' is tempting because the replications happened later, but it doesn't convey the contrast that is central to the meaning.",
+    takeaway: "When two transitions seem possible, choose the one that expresses the most important logical relationship, not just time order.",
+  }),
+];

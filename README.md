@@ -1,36 +1,47 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Peak SAT
 
-## Getting Started
+Digital SAT prep with adaptive practice, a context-aware AI tutor, spaced review of mistakes, and full-length adaptive practice tests. Built with Next.js 15, React 19, Prisma, and the Claude API.
 
-First, run the development server:
+## Run it locally
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install                 # also runs prisma generate
+cp .env.example .env        # then set AUTH_SECRET (and ANTHROPIC_API_KEY for the tutor)
+npm run db:migrate          # creates the SQLite dev database
+npm run dev                 # http://localhost:3000
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Environment variables (server-side only; nothing secret is sent to the browser):
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+| Variable | Required | Purpose |
+|---|---|---|
+| `DATABASE_URL` | yes | `file:./dev.db` locally. Use Postgres in production (change `provider` in `prisma/schema.prisma`). |
+| `AUTH_SECRET` | yes | 32+ random characters, used to sign session cookies. `openssl rand -base64 32` |
+| `ANTHROPIC_API_KEY` | for the tutor | Without it the tutor shows an "unavailable" message and everything else works. |
+| `NEXT_PUBLIC_DESMOS_API_KEY` | for production | Desmos's demo key is used if unset. It's fine for development only; get a production key from Desmos. |
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Checks
 
-## Learn More
+```bash
+npm run check:bank   # validates every question; math answers are checked by code
+npm test             # unit tests (grading, mastery model, spaced repetition, plan, validator)
+npm run build && PORT=3100 npm start &
+npm run test:e2e     # API smoke test against a running server on port 3100
+npm run eval:tutor -- --yes   # real API calls: tutor accuracy, pushback, and hint-leak eval
+```
 
-To learn more about Next.js, take a look at the following resources:
+## How it's organized
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- `src/content/`: question bank (original questions only), skill taxonomy, lessons, and the research-methods list. Math questions come from seeded templates; each instance has its own answer checker, and the validator rejects any question whose key fails or whose distractor passes.
+- `src/lib/`: auth, the mastery model (per-skill logistic rating), spaced repetition (SM-2 variant), recommendations, the daily plan, session engine (practice, review, timed, diagnostic, and full adaptive tests), and the tutor prompt.
+- `src/app/api/`: every grading, scoring, and AI call happens here, on the server. The answer key never reaches the browser before a question is graded.
+- `src/app/(app)/`: the signed-in app: Dashboard, Practice, AI Tutor, Study Plan, Mistake Review, Full SAT Tests, Lessons, Progress, Settings, Desmos training.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Honest limitations
 
-## Deploy on Vercel
+- Score estimates and practice-test scores are unofficial. Adaptive routing follows the published two-stage design, but the threshold and scaling are approximations, not College Board's.
+- The bank holds 303 questions (93 Reading and Writing, 210 Math). Full tests draw from the same pool as practice, so heavy users will see repeats.
+- The tutor's behavior has only been tested without an API key. Run `npm run eval:tutor` once a key is set.
+- The rate limiter is in-memory, so with several server instances, use a shared store such as Redis.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+SAT® is a trademark registered by the College Board, which is not affiliated with, and does not endorse, this product.
